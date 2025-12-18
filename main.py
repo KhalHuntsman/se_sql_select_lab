@@ -1,39 +1,65 @@
-# STEP 1A
-# Import SQL Library and Pandas
+# STEP 1
+import sqlite3
+import pandas as pd
 
-# STEP 1B
-# Connect to the database
-conn = None
-
+conn = sqlite3.connect('data.sqlite')
 
 # STEP 2
-# Replace None with your code
-df_first_five = None
+df_first_five = pd.read_sql("""
+SELECT employee_number, lastName
+    FROM employees;
+""", conn).head()
 
 # STEP 3
-# Replace None with your code
-df_five_reverse = None
+df_five_reverse = pd.read_sql("""
+SELECT lastName, employee_number
+    FROM employees;
+""", conn).head()
 
 # STEP 4
-# Replace None with your code
-df_alias = None
+df_alias = pd.read_sql("""
+SELECT employee_number AS ID
+    FROM employees;
+""", conn).head()
 
 # STEP 5
-# Replace None with your code
-df_executive = None
+df_executive = pd.read_sql("""
+SELECT firstName, lastName, jobTitle,
+        CASE
+            WHEN jobTitle = "President" 
+                OR jobTitle = "VP Sales" 
+                OR jobTitle = "VP Marketing" 
+            THEN "Executive"
+            ELSE "Not Executive"
+        END AS role
+    FROM employees;
+""", conn).head()
 
 # STEP 6
-# Replace None with your code
-df_name_length = None
+df_name_length = pd.read_sql("""
+SELECT length(lastName) AS name_length
+    FROM employees;
+""", conn).head()
 
 # STEP 7
-# Replace None with your code
-df_short_title = None
+df_short_title = pd.read_sql("""
+SELECT substr(jobTitle, 1,2) AS short_title
+    FROM employees;
+""", conn).head()
 
 # STEP 8
-# Replace None with your code
-sum_total_price = None
+sum_total_price = pd.read_sql("""
+SELECT SUM(ROUND(priceEach * quantityOrdered, 0)) AS total_amount
+FROM orderDetails;
+""", conn).head()
 
 # STEP 9
-# Replace None with your code
-df_day_month_year = None
+df_day_month_year = pd.read_sql("""
+SELECT orderDate,
+        strftime("%d", orderDate) AS day,
+        strftime("%m", orderDate) AS month,
+        strftime("%Y", orderDate) AS year
+    FROM orderDetails;
+""", conn).head()
+
+conn.close()
